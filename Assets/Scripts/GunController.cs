@@ -15,28 +15,11 @@ public class GunController : MonoBehaviour
 
     void Update()
     {
-        // Change selected wave
-        lastWave = waveSelected;
-        waveSelected += Convert.ToInt16(Input.mouseScrollDelta.y);
-        
-        if (waveSelected<0)
-        {
-            waveSelected = waves.Length-1;
-        } else if (waveSelected>waves.Length-1) {
-            waveSelected = 0;
-        }
-
-        // Clear lasers when players changes selected wave
-        if (lastWave!=waveSelected)
-        {
-            disableAll();
-        }
+        // Load the gun
+        load();
 
         // Fire the wave
         fire();
-
-        // Change the gun's sprite
-        load();
     }
 
     // Custom functions
@@ -61,7 +44,30 @@ public class GunController : MonoBehaviour
 
     void load() // Load the gun with selected EM Wave
     {
+        // Change selected wave
+        lastWave = waveSelected;
+        waveSelected += Convert.ToInt16(Input.mouseScrollDelta.y);
         
+        if (waveSelected<0)
+        {
+            waveSelected = waves.Length-1;
+        } else if (waveSelected>waves.Length-1) {
+            waveSelected = 0;
+        }
+
+        // Clear lasers when players changes selected wave
+        if (lastWave!=waveSelected)
+        {
+            disableAll();
+        }
+
+        // Change sprites
+        if (ammo[waveSelected]>0)
+        {
+            gun.GetComponent<SpriteRenderer>().sprite = sprites[waveSelected];
+        } else {
+            gun.GetComponent<SpriteRenderer>().sprite = sprites[7];
+        }
     }
 
     void disableAll() // Disable all wave objects
