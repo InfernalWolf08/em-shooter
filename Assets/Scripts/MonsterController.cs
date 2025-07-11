@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Pathfinding;
 
 public class MonsterController : MonoBehaviour
 {
@@ -10,12 +11,14 @@ public class MonsterController : MonoBehaviour
 
     [Header("AI")]
     public Transform player;
+    public AIDestinationSetter AiDest;
 
     void Start()
     {
         // Initialize
         player = GameObject.FindWithTag("Player").transform;
         baseSpeed = speed;
+        AiDest.target = player;
     }
 
     void Update()
