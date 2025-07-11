@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class MonsterController : MonoBehaviour
@@ -15,5 +16,10 @@ public class MonsterController : MonoBehaviour
         // Initialize
         player = GameObject.FindWithTag("Player").transform;
         baseSpeed = speed;
+    }
+
+    void Update()
+    {
+
     }
 }
