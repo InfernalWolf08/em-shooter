@@ -12,6 +12,7 @@ public class GunController : MonoBehaviour
     public int waveSelected=0;
     private int lastWave=0;
     public LayerMask hitMask;
+    public Transform laserMask;
 
     void Update()
     {
@@ -34,7 +35,13 @@ public class GunController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.right, Mathf.Infinity, hitMask);
             if (hit)
             {
+                // On hit
                 print(hit.collider.gameObject.name);
+
+                laserMask.localScale = new Vector3(hit.distance, laserMask.localScale.y, laserMask.localScale.z);
+            } else {
+                // Nothing was hit
+                laserMask.localScale = new Vector3(2, laserMask.localScale.y, laserMask.localScale.z);
             }
         } else {
             // Hide all waves
