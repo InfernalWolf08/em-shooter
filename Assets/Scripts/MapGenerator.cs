@@ -4,10 +4,11 @@ public class MapGenerator : MonoBehaviour
 {
     public GameObject tile;
     public Vector3 snappedPos;
+    public bool active;
 
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && active)
         {
             // Spawn new tile
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
