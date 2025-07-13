@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 2056af3cfbee5e14393c339f81223b73
+labels:
+- Randomization
+- Randomizer
+- GameObject
+- Object
+- Chance
+- Weighted
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 39134
+  packageName: Object Randomizer
+  packageVersion: 1.0
+  assetPath: Assets/Object Randomizer/Scripts/ObjectRandomizer.cs
+  uploadId: 72292

@@ -1,18 +1,24 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GunController : MonoBehaviour
 {
     [Header("Data")]
     public GameObject[] waves;
     public Sprite[] sprites;
-    public int[] ammo;
+    public float[] ammo;
+    public Color32[] colors;
     public Transform firePoint;
     public GameObject gun;
     public int waveSelected=0;
     private int lastWave=0;
     public LayerMask hitMask;
     public Transform laserMask;
+
+    [Header("UI")]
+    public TextMeshProUGUI ammoAmount;
 
     void Update()
     {
@@ -21,12 +27,15 @@ public class GunController : MonoBehaviour
 
         // Fire the wave
         fire();
+
+        // Update the UI
+        UI();
     }
 
     // Custom functions
     void fire() // Fire the gun
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && ammo[waveSelected]>0)
         {
             // Shoot the gun
             waves[waveSelected].SetActive(true);
@@ -43,6 +52,9 @@ public class GunController : MonoBehaviour
                 // Nothing was hit
                 laserMask.localScale = new Vector3(2, laserMask.localScale.y, laserMask.localScale.z);
             }
+
+            // Lose ammo
+            ammo[waveSelected] -= Time.deltaTime;
         } else {
             // Hide all waves
             disableAll();
@@ -75,6 +87,12 @@ public class GunController : MonoBehaviour
         } else {
             gun.GetComponent<SpriteRenderer>().sprite = sprites[7];
         }
+    }
+
+    void UI()
+    {
+        ammoAmount.text = waveSelected==0 ? "Radio Waves:\nInfinite" : waves[waveSelected].name + "s:\n" + Convert.ToString(Convert.ToInt16(ammo[waveSelected]));
+        ammoAmount.color = colors[waveSelected];
     }
 
     void disableAll() // Disable all wave objects
