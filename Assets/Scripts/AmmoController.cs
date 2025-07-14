@@ -10,9 +10,9 @@ public class AmmoController : MonoBehaviour
     {
         try
         {
-            if (info.transform.parent.tag=="Player")
+            if (info.transform.parent.gameObject.tag=="Player")
             {
-                info.gameObject.GetComponent<GunController>().ammo[ammoType]+=amount;
+                info.transform.parent.gameObject.GetComponent<GunController>().ammo[ammoType]+=amount;
                 this.gameObject.SetActive(false);
             }
         } catch (Exception error) {}

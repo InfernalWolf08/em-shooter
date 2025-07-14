@@ -118,13 +118,20 @@ public class MonsterController : MonoBehaviour
         {
             // Chase
             AiDest.target = player;
-            speed = baseSpeed*2f;
+            speed = baseSpeed*1.5f;
         } else if (!isChasing && AiDest.target==player) {
             // Stop Chasing
             AiDest.target = null;
             speed = baseSpeed;
         }
         pathing.maxSpeed = speed;
+
+        // Reset target on reached destination
+        if (pathing.reachedDestination)
+        {
+            AiDest.target = null;
+            isChasing = false;
+        }
 
         // Play death sound
         if (health<=0 && !deathScream.isPlaying)
