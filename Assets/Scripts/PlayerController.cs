@@ -6,8 +6,8 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     [Header("Health")]
-    public int maxHealth;
-    public int currentHealth;
+    public float maxHealth;
+    public float currentHealth;
     public Slider healthBar;
     public TextMeshProUGUI healthText;
     public GameObject loseScreen;
@@ -161,9 +161,9 @@ public class PlayerController : MonoBehaviour
     public void takeDamage(int damage)
     {
         currentHealth -= damage;
-        int healthPercent = 100*(currentHealth/maxHealth);
+        float healthPercent = 100*(currentHealth/maxHealth);
         healthBar.value = healthPercent;
-        healthText.text = System.Convert.ToString(healthPercent) + "%";
+        healthText.text = System.Convert.ToString(ToInt16(healthPercent)) + "%";
     
         if (currentHealth<=0)
         {

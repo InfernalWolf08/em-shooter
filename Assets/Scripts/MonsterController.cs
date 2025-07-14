@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Pathfinding;
 
@@ -29,6 +30,8 @@ public class MonsterController : MonoBehaviour
     public LayerMask eyeMask;
     [Header("Hearing")]
     public List<AudioSource> audioSources = new List<AudioSource>();
+    public Transform ears;
+    public float earRad;
     [Header("Death")]
     public AudioSource deathScream;
     public ScoreController scoreCont;
@@ -61,12 +64,31 @@ public class MonsterController : MonoBehaviour
         }
 
         // Collect data on nearby audioSources
-
+        Collider2D[] hearing = Physics2D.OverlapCircleAll(ears.position, earRad);
+        
+        foreach (Collider2D m_collider in hearing)
+        {
+            if (m_collider.gameObject.GetComponent<AudioSource>()!=null && !audioSources.Contains(m_collider.gameObject.GetComponent<AudioSource>()))
+            {
+                audioSources.Add(m_collider.gameObject.GetComponent<AudioSource>());
+            }
+        }
 
         // Hear the player
         foreach (AudioSource audioSource in audioSources)
         {
-            if (audioSource.isPlaying)
+            // Initialize
+            bool canHear = true;
+
+            // Remove all audiosources out of range
+            if (!hearing.Contains(audioSource.gameObject.GetComponent<Collider2D>()))
+            {
+                audioSources.Remove(audioSource);
+                canHear = false;
+            }
+
+            // Check if an audioSource in range is playing
+            if (audioSource.isPlaying && canHear)
             {
                 PlayerController playerCont = player.GetComponent<PlayerController>();
                 if (audioSource.gameObject.name!="PlayerSprite")
@@ -115,22 +137,9 @@ public class MonsterController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D info)
     {
-        // Collect data on nearby audioSources
-        if (info.gameObject.GetComponent<AudioSource>()!=null)
-        {
-            audioSources.Add(info.gameObject.GetComponent<AudioSource>());
-        } else if (info.transform.parent.gameObject.tag == "Player") { // Attack player
-            print("Attacked");
+        // Attack player
+        if (LayerMask.LayerToName(info.gameObject.layer) == "Player") {
             player.GetComponent<PlayerController>().takeDamage(damage);
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D info)
-    {
-        // Collect data on nearby audioSources
-        if (info.gameObject.GetComponent<AudioSource>()!=null)
-        {
-            audioSources.Remove(info.gameObject.GetComponent<AudioSource>());
         }
     }
 
