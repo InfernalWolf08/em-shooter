@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -14,17 +15,23 @@ public class LightController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D info)
     {
-        if (info.transform.parent.gameObject.tag=="Player")
+        try
         {
-            light.enabled = true;
-        }
+            if (info.transform.parent.gameObject.tag=="Player")
+            {
+                light.enabled = true;
+            }
+        } catch (Exception error) {}
     }
 
     void OnTriggerExit2D(Collider2D info)
     {
-        if (info.transform.parent.gameObject.tag=="Player")
+        try
         {
-            light.enabled = false;
-        }
+            if (info.transform.parent.gameObject.tag=="Player")
+            {
+                light.enabled = false;
+            }
+        } catch (Exception error) {}
     }
 }

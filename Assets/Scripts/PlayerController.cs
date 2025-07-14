@@ -1,27 +1,45 @@
 using static System.Convert;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Health")]
+    public int maxHealth;
+    public int currentHealth;
+    public Slider healthBar;
+    public TextMeshProUGUI healthText;
+    public GameObject loseScreen;
+
     [Header("Movement")]
     public Rigidbody2D rb2d;
     [Range(0.1f, 50f)] public float speed=11f;
-    private float baseSpeed;
+    [HideInInspector] public float baseSpeed;
     [Range(0.1f, 2f)] public float sprintMultiplier=1.75f;
     public float maxStamina=3f;
     private float stamina;
     private bool canSprint=true;
+    public AudioSource footsteps;
 
     [Header("Animation")]
     public Animator animator;
     private bool isMoving;
     public SpriteRenderer sr;
 
+    [Header("Misc")]
+    public ScoreController scoreCont;
+
     void Start()
     {
         // Initialize
+        loseScreen.SetActive(false);
+        Time.timeScale = 1;
         baseSpeed = speed;
         stamina = maxStamina;
+        currentHealth = maxHealth;
+        healthBar.value = 100;
+        healthText.text = "Health: " + System.Convert.ToString((100*(currentHealth/maxHealth))) + "%";
     }
 
     void FixedUpdate()
@@ -39,6 +57,7 @@ public class PlayerController : MonoBehaviour
             // Increase speed
             speed = baseSpeed*sprintMultiplier;
             animator.speed = sprintMultiplier;
+            footsteps.pitch = sprintMultiplier;
 
             // Lower stamina
             if (stamina>0)
@@ -49,6 +68,7 @@ public class PlayerController : MonoBehaviour
             // Reset speed
             speed = baseSpeed;
             animator.speed = 1;
+            footsteps.pitch = 1;
 
             // Raise stamina
             if (stamina<maxStamina)
@@ -72,7 +92,15 @@ public class PlayerController : MonoBehaviour
 
         // Move the player
         rb2d.linearVelocity = velocity;
-        isMoving = velocity.x+velocity.y!=0;
+        isMoving = velocity.x!=0||velocity.y!=0;
+
+        // Footsteps
+        if (isMoving && !footsteps.isPlaying)
+        {
+            footsteps.Play();
+        } else if (!isMoving) {
+            footsteps.Stop();
+        }
 
         // Animate the player
         animator.SetBool("Walking", isMoving);
@@ -128,5 +156,25 @@ public class PlayerController : MonoBehaviour
         } else if (frame==0) {
             gun.localPosition = new Vector3(-0.0244f, 0, gun.localPosition.z);
         }
+    }
+
+    public void takeDamage(int damage)
+    {
+        currentHealth -= damage;
+        int healthPercent = 100*(currentHealth/maxHealth);
+        healthBar.value = healthPercent;
+        healthText.text = System.Convert.ToString(healthPercent) + "%";
+    
+        if (currentHealth<=0)
+        {
+            die();
+        }
+    }
+
+    void die()
+    {
+        loseScreen.SetActive(true);
+        scoreCont.displayScore();
+        Time.timeScale = 0;
     }
 }

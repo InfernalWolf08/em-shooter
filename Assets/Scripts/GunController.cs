@@ -9,6 +9,7 @@ public class GunController : MonoBehaviour
     public GameObject[] waves;
     public Sprite[] sprites;
     public float[] ammo;
+    public int[] damage;
     public Color32[] colors;
     public Transform firePoint;
     public GameObject gun;
@@ -16,6 +17,7 @@ public class GunController : MonoBehaviour
     private int lastWave=0;
     public LayerMask hitMask;
     public Transform laserMask;
+    public AudioSource fireSound;
 
     [Header("UI")]
     public TextMeshProUGUI ammoAmount;
@@ -45,7 +47,11 @@ public class GunController : MonoBehaviour
             if (hit)
             {
                 // On hit
-                print(hit.collider.gameObject.name);
+                print(hit.collider.gameObject.tag);
+                if (hit.collider.gameObject.tag=="Monster")
+                {
+                    hit.collider.transform.parent.gameObject.GetComponent<MonsterController>().health -= damage[waveSelected];
+                }
 
                 laserMask.localScale = new Vector3(hit.distance, laserMask.localScale.y, laserMask.localScale.z);
             } else {
@@ -55,9 +61,21 @@ public class GunController : MonoBehaviour
 
             // Lose ammo
             ammo[waveSelected] -= Time.deltaTime;
+
+            // Play sound
+            if (!fireSound.isPlaying)
+            {
+                fireSound.Play();
+            }
         } else {
             // Hide all waves
             disableAll();
+
+            // Stop playing sound
+            if (fireSound.isPlaying)
+            {
+                fireSound.Stop();
+            }
         }
     }
 

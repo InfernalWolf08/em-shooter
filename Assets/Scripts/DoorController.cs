@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class DoorController : MonoBehaviour
@@ -8,6 +9,7 @@ public class DoorController : MonoBehaviour
     private Vector3 targetPos;
     public float speed = 1;
     private float t;
+    public AudioSource slideSound;
 
     void Start()
     {
@@ -15,6 +17,7 @@ public class DoorController : MonoBehaviour
         startPos = new Vector3(0, 0, 0);
         targetPos = startPos;
         curPos = startPos;
+        slideSound = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -35,23 +38,39 @@ public class DoorController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D info)
     {
-        if (info.transform.parent.gameObject.tag=="Player")
+        try
         {
-            // Open
-            t = 1-t;
-            targetPos = endPos;
-            curPos = startPos;
-        }
+            if (info.transform.parent.gameObject.tag=="Player")
+            {
+                // Open
+                t = 1-t;
+                targetPos = endPos;
+                curPos = startPos;
+                
+                if (!slideSound.isPlaying)
+                {
+                    slideSound.Play();
+                }
+            }
+        } catch (Exception e) {}
     }
 
     void OnTriggerExit2D(Collider2D info)
     {
-        if (info.transform.parent.gameObject.tag=="Player")
+        try
         {
-            // Close
-            t = 1-t;
-            targetPos = startPos;
-            curPos = endPos;
-        }
+            if (info.transform.parent.gameObject.tag=="Player")
+            {
+                // Close
+                t = 1-t;
+                targetPos = startPos;
+                curPos = endPos;
+                
+                if (!slideSound.isPlaying)
+                {
+                    slideSound.Play();
+                }
+            }
+        } catch (Exception e) {}
     }
 }
