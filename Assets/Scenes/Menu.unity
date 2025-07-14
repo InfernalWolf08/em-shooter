@@ -427,12 +427,20 @@ MonoBehaviour:
 
     A
     couple weeks back, one of the organizaton''s bases was taken over by a dangerous
-    type of demon known as "The Sightless"
+    type of demon known as "The Sightless".
 
 
     The sightless can only see a few
     feet in front of them and rely on their keen sense of hearing to pick up on nearby
-    soundwaves'
+    soundwaves.
+
+
+    Equipped with an electromagnetic wave gun, you have been tasked
+    to scout inside the base, and retreive an important asset if possible.
+
+
+    Good
+    luck Soldier'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
