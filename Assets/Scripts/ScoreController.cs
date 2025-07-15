@@ -7,6 +7,7 @@ public class ScoreController : MonoBehaviour
     public int score;
     public int highScore;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI winText;
     public TextMeshProUGUI loseText;
 
     void Start()
@@ -22,6 +23,20 @@ public class ScoreController : MonoBehaviour
         scoreText.text = "Score: " + System.Convert.ToString(score);
     }
 
+    public void winMsg(string asset)
+    {
+        // Get highscore
+        highScore = PlayerPrefs.GetInt("HighScore");
+        if (score>highScore)
+        {
+            highScore = score;
+            PlayerPrefs.SetInt("HighScore", highScore);
+        }
+
+        // Display text
+        winText.text = $"\nYou made it out alive{asset}\n\nFinal Score: {score}\nHighscore: {highScore}";
+    }
+
     public void displayScore()
     {
         // Get highscore
@@ -33,6 +48,6 @@ public class ScoreController : MonoBehaviour
         }
 
         // Display text
-        loseText.text = $"\nYou Have Died\n\nFinal Score: {score}\nHighscore: {highScore}";
+        loseText.text = $"\nYou have DIED\n\nFinal Score: {score}\nHighscore: {highScore}";
     }
 }

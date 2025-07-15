@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     public float currentHealth;
     public Slider healthBar;
     public TextMeshProUGUI healthText;
-    public GameObject loseScreen;
 
     [Header("Movement")]
     public Rigidbody2D rb2d;
@@ -29,6 +28,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Misc")]
     public ScoreController scoreCont;
+    public bool hasWon;
+    public GameObject loseScreen;
+    public GameObject winScreen;
 
     void Start()
     {
@@ -175,6 +177,30 @@ public class PlayerController : MonoBehaviour
     {
         loseScreen.SetActive(true);
         scoreCont.displayScore();
+
+        foreach (AudioSource audioSource in Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.InstanceID))
+        {
+            audioSource.mute = true;
+        }
+
+        Time.timeScale = 0;
+    }
+
+    public void win()
+    {
+        winScreen.SetActive(true);
+        if (hasWon)
+        {
+            scoreCont.winMsg(" with the Asset.\nGreat Job");
+        } else {
+            scoreCont.winMsg("");
+        }
+
+        foreach (AudioSource audioSource in Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.InstanceID))
+        {
+            audioSource.mute = true;
+        }
+        
         Time.timeScale = 0;
     }
 }
