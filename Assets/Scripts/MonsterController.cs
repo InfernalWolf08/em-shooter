@@ -65,6 +65,7 @@ public class MonsterController : MonoBehaviour
 
         // Collect data on nearby audioSources
         Collider2D[] hearing = Physics2D.OverlapCircleAll(ears.position, earRad);
+        audioSources.Clear();
         
         foreach (Collider2D m_collider in hearing)
         {
@@ -80,12 +81,12 @@ public class MonsterController : MonoBehaviour
             // Initialize
             bool canHear = true;
 
-            // Remove all audiosources out of range
+            /*// Remove all audiosources out of range
             if (!hearing.Contains(audioSource.gameObject.GetComponent<Collider2D>()))
             {
                 audioSources.Remove(audioSource);
                 canHear = false;
-            }
+            }*/
 
             // Check if an audioSource in range is playing
             if (audioSource.isPlaying && canHear)
@@ -136,6 +137,7 @@ public class MonsterController : MonoBehaviour
         // Play death sound
         if (health<=0 && !deathScream.isPlaying)
         {
+            animator.enabled = false;
             speed = 0;
             scoreCont.score += 1;
             deathScream.Play();
@@ -172,6 +174,7 @@ public class MonsterController : MonoBehaviour
             // Die
             if (health<=0)
             {
+                transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
                 yield return new WaitForSeconds(2.8f);
                 this.gameObject.SetActive(false);
             }

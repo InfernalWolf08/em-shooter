@@ -51,6 +51,7 @@ public class GunController : MonoBehaviour
                 if (hit.collider.gameObject.tag=="Monster")
                 {
                     hit.collider.transform.parent.gameObject.GetComponent<MonsterController>().health -= damage[waveSelected];
+                    hit.collider.transform.parent.gameObject.GetComponent<MonsterController>().animator.SetTrigger("Dmg");
                 }
 
                 laserMask.localScale = new Vector3(hit.distance, laserMask.localScale.y, laserMask.localScale.z);
